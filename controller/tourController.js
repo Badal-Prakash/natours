@@ -3,8 +3,8 @@ const fs = require('fs');
 
 const tours = JSON.parse(
   fs.readFileSync(
-    '/Users/badal/Desktop/complete-node-bootcamp-master/4-natours/starter/dev-data/data/tours-simple.json'
-  )
+    '/Users/badal/Desktop/complete-node-bootcamp-master/4-natours/starter/dev-data/data/tours-simple.json',
+  ),
 );
 
 exports.checkID = (req, res, next, val) => {
@@ -13,6 +13,16 @@ exports.checkID = (req, res, next, val) => {
     return res.status(404).json({
       status: 'fail',
       message: 'Invalid id',
+    });
+  }
+  next();
+};
+
+exports.checkBody = (req, res, next) => {
+  if (!req.body.name || !req.body.price) {
+    return res.status(400).json({
+      status: 'fail',
+      message: 'Missing price of name',
     });
   }
   next();
@@ -54,17 +64,10 @@ exports.createTour = (req, res) => {
           tours: newTour,
         },
       });
-    }
+    },
   );
 };
 exports.patchTour = (req, res) => {
-  // const id = req.params.id * 1;
-  // if (id > tours.length) {
-  //   return res.status(404).json({
-  //     status: 'fail',
-  //     message: 'Invalid id',
-  //   });
-  // }
   res.status(200).json({
     status: 'success',
     data: {
@@ -73,13 +76,6 @@ exports.patchTour = (req, res) => {
   });
 };
 exports.deleteTour = (req, res) => {
-  // const id = req.params.id * 1;
-  // if (id > tours.length) {
-  //   return res.status(404).json({
-  //     status: 'fail',
-  //     message: 'Invalid id',
-  //   });
-  // }
   res.status(204).json({
     status: 'success',
     data: null,
