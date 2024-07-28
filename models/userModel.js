@@ -34,7 +34,10 @@ const UserSchema = new mongoose.Schema({
       message: 'Please enter your confirm password'
     }
   },
-  photo: { type: 'String' },
+  photo: {
+    type: String,
+    default: 'default.jpg'
+  },
   passwordResetToken: { type: 'String' },
   passwordResetExpire: Date,
   active: {
