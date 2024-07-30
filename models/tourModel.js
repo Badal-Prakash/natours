@@ -105,8 +105,6 @@ const tourSchema = new mongoose.Schema(
         ref: 'User'
       }
     ]
-
-    // guides: Array
   },
   {
     toJSON: { virtuals: true },
@@ -129,22 +127,15 @@ tourSchema.pre('save', function(next) {
   next();
 });
 
-// tourSchema.pre('save', async function(next) {
-//   try {
-//     // Replace guide IDs with actual user documents
-//     this.guides = await Promise.all(
-//       this.guides.map(async id => await User.findById(id))
-//     );
-//     next();
-//   } catch (err) {
-//     next(err);
-//   }
-// });
-
 tourSchema.pre(/^find/, function(next) {
   this.find({ secretTour: { $ne: true } });
 
   this.start = Date.now();
+  next();
+});
+
+tourSchema.pre(/^find/, function(next) {
+  this.populate({ path: 'guides', select: '-__v -passwordChangedAt' });
   next();
 });
 
