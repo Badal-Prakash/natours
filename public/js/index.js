@@ -1,5 +1,6 @@
 /* eslint-disable */
 import '@babel/polyfill';
+import axios from 'axios';
 import { displayMap } from './mapbox';
 import { login, logout } from './login';
 import { updateSettings } from './updateSettings';

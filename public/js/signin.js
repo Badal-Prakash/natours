@@ -11,7 +11,7 @@ const signup = async (name, email, password, confirmPassword) => {
     });
 
     if (!response.ok) {
-      throw new Error('Unable to fetch');
+      throw new Error('Unable');
     }
     const data = await response.json();
 

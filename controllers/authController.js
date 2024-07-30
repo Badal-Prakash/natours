@@ -6,6 +6,7 @@ const crypto = require('crypto');
 const bcrypt = require('bcryptjs');
 const AppError = require('./../utils/appError');
 const catchAsync = require('./../utils/catchAsync');
+const exp = require('constants');
 
 const signToken = id => {
   return jwt.sign({ id }, process.env.JWT_SECREAT, {
@@ -60,6 +61,14 @@ exports.login = catchAsync(async (req, res, next) => {
   }
   createSendToken(user, 201, req, res);
 });
+
+exports.logout = (req, res) => {
+  res.cookie('jwt', 'loggedout', {
+    expires: new Date(Date.now() + 10 * 1000),
+    httpOnly: true
+  });
+  res.status(200).json({ status: 'success' });
+};
 
 exports.protect = catchAsync(async (req, res, next) => {
   let token;
