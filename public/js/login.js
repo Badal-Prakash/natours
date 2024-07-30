@@ -1,4 +1,5 @@
 /* eslint-disable */
+// import '@babel/polyfill';
 const login = async (email, password) => {
   try {
     const response = await fetch('/api/v1/users/login', {
@@ -10,17 +11,21 @@ const login = async (email, password) => {
     });
 
     if (!response.ok) {
-      throw new Error('Unable to fetch');
+      throw new Error(
+        'Unable to log in. Please check your credentials and try again.'
+      );
     }
 
     const data = await response.json();
     console.log(data);
 
     if (data.status === 'success') {
-      alert('success', 'Logged in successfully!');
+      alert('Logged in successfully!');
       window.setTimeout(() => {
         location.assign('/');
       }, 1500);
+    } else {
+      throw new Error(data.message || 'Login failed. Please try again.');
     }
   } catch (err) {
     alert(err.message);
@@ -30,23 +35,23 @@ const login = async (email, password) => {
 const logout = async () => {
   try {
     const response = await fetch('/api/v1/users/logout', {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json'
-      }
+      method: 'GET'
     });
 
+    if (!response.ok) {
+      throw new Error('Failed to log out');
+    }
+
     const data = await response.json();
-    console.log(data);
 
     if (data.status === 'success') {
       location.reload(true);
     } else {
-      alert('Error logging out! Try again.');
+      showAlert('error', 'Failed to log out. Please try again.');
     }
   } catch (err) {
-    console.log(err);
-    alert('Error logging out! Try again.');
+    console.log(err.message);
+    showAlert('error', 'Error logging out! Try again.');
   }
 };
 
@@ -55,7 +60,6 @@ document.querySelector('.login-form').addEventListener('submit', e => {
   const email = document.getElementById('email').value;
   const password = document.getElementById('password').value;
   login(email, password);
-  logout();
 });
 
-document.querySelector('#logout_btn').addEventListener('click', () => {});
+document.querySelector('.nav__el--logout').addEventListener('click', logout);
