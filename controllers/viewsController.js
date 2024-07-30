@@ -3,7 +3,6 @@ const User = require('../models/userModel');
 const Booking = require('../models/bookingModel');
 const catchAsync = require('../utils/catchAsync');
 const AppError = require('../utils/appError');
-
 exports.alerts = (req, res, next) => {
   const { alert } = req.query;
   if (alert === 'booking')
@@ -34,9 +33,6 @@ exports.getTour = catchAsync(async (req, res, next) => {
   if (!tour) {
     return next(new AppError('There is no tour with that name.', 404));
   }
-
-  // 2) Build template
-  // 3) Render template using data from 1)
   res.status(200).render('tour', {
     title: `${tour.name} Tour`,
     tour
@@ -46,6 +42,11 @@ exports.getTour = catchAsync(async (req, res, next) => {
 exports.getLoginForm = (req, res) => {
   res.status(200).render('login', {
     title: 'Log into your account'
+  });
+};
+exports.getSigninForm = (req, res) => {
+  res.status(200).render('signin', {
+    title: 'Create your account'
   });
 };
 
